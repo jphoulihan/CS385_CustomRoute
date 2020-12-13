@@ -1,2 +1,2 @@
-# CS385_CustomRoute
+# CS385_Yoga_App
 Created with CodeSandbox
