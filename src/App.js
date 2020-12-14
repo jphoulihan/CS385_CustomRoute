@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // import Beginner from "./components/Beginner";
 import Intermediate from "./components/Intermediate";
 import Advanced from "./components/Advanced";
-// import Custom from "./components/Custom";
+import Custom from "./components/Custom";
 import "./styles.css";
 import Logo from "./self_improvement-white-18dp.svg";
 import arrow from "./arrow_drop_down-24px (1).svg";
@@ -34,7 +34,7 @@ class App extends Component {
     this.toggleIntermediate = this.toggleIntermediate.bind(this);
     this.toggleAdvanced = this.toggleAdvanced.bind(this);
     this.toggleRoutine = this.toggleRoutine.bind(this);
-    // this.pickBeginner = this.pickBeginner.bind(this);
+    this.pickBeginner = this.pickBeginner.bind(this);
   }
 
   //****************Toggle functions triggered on button click, isBeginner/isIntermediate/isAdvanced/isGoToRoutine toggle:false/true*********************//
@@ -75,11 +75,13 @@ class App extends Component {
     };
   }
 
-  // pickBeginner(bodyID) {
-  //   let foundBodObj = this.state.apiDataBeginner.filter(
-  //     this.getID(bodyID));
-  //     this.setState({pickNmix: this.state.pickNmix.concat(foundBodObj)});
-  //   }
+  pickBeginner(bodyID) {
+    let foundBodObj = this.state.apiDataBeginner.filter(this.getID(bodyID));
+    this.setState({
+      routineArray: this.state.routineArray.concat(foundBodObj)
+    });
+  }
+
   //*********************************************************//
 
   //****************API calls starts here********************//
@@ -97,6 +99,7 @@ class App extends Component {
 
       // update the state variables correctly.
       //access different parts of the json array by initializing this.setState and creating key:value pairs.
+      this.setState({ apiDataAll: jsonResult });
       this.setState({ apiDataBeginner: jsonResult.beginner });
       this.setState({ apiDataIntermediate: jsonResult.intermediate });
       this.setState({ apiDataAdvanced: jsonResult.advanced });
@@ -192,7 +195,7 @@ class App extends Component {
           {this.state.isBeginner ? (
             <Beginner
               mapObjectBeginner={this.state.apiDataBeginner}
-              customItems={this.state.routineArray}
+              pickBeginner={this.pickBeginner}
             />
           ) : null}
           {/*Beginner map ternary statement triggered by a drop down button click*/}
@@ -232,18 +235,12 @@ class App extends Component {
 
 //******************************************* */
 class Beginner extends Component {
-  pickBeginner(bodyID) {
-    let foundBodObj = this.state.apiDataBeginner.filter(this.getID(bodyID));
-    this.setState({
-      routineArray: this.state.routineArray.concat(foundBodObj)
-    });
-  }
-
   render() {
     // const customItems = this.props.customItems;
     //this const declaration connects this Beginner class to the App class. It is the way to pass the//
     //apiDataBeginner state to call the map function on it from within this component//
     const mapBeginner = this.props.mapObjectBeginner;
+    const onPick = this.props.pickBeginner;
 
     return (
       <div className="card-group">
@@ -267,7 +264,7 @@ class Beginner extends Component {
                   <source src={person.audio} />
                 </audio>
                 <button
-                  onClick={() => this.pickBeginner(person.id)}
+                  onClick={() => onPick(person.id)}
                   type="button"
                   class="btn btn-primary btn-lg btn-block"
                 >
