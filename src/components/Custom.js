@@ -5,6 +5,7 @@ class Custom extends Component {
     //this const declaration connects this Beginner class to the App class. It is the way to pass the//
     //apiDataBeginner state to call the map function on it from within this component//
     const mapCustom = this.props.mapObjectCustom;
+    // const clear = this.props.clearR;
 
     return (
       <div className="card-group">

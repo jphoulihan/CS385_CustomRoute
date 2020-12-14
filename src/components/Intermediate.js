@@ -3,9 +3,11 @@ import React, { Component } from "react";
 class Intermediate extends Component {
   render() {
     const mapIntermediate = this.props.mapObjectIntermediate;
+    const onPick = this.props.pickIntermediate;
+
     return (
       <div className="card-group">
-        {mapIntermediate.map((person, index) => (
+        {mapIntermediate.map((person) => (
           <div className="card text-center">
             <div class="card">
               <div className="card-body">
@@ -13,7 +15,7 @@ class Intermediate extends Component {
                   className="card-img-top"
                   alt="yogapic"
                   src={person.imgURL}
-                  key={index}
+                  key={person.id}
                 />
 
                 <h3 className="card-title">{person.body_part}</h3>
@@ -23,7 +25,11 @@ class Intermediate extends Component {
                 <audio controls autoplay>
                   <source src={person.audio} />
                 </audio>
-                <button type="button" class="btn btn-primary btn-lg btn-block">
+                <button
+                  onClick={() => onPick(person.id)}
+                  type="button"
+                  class="btn btn-primary btn-lg btn-block"
+                >
                   Add to Routine
                 </button>
               </div>
