@@ -5,10 +5,11 @@ class Advanced extends Component {
     //this const declaration connects this Beginner class to the App class. It is the way to pass the//
     //apiDataBeginner state to call the map function on it from within this component//
     const mapAdvanced = this.props.mapObjectAdvanced;
+    const onPick = this.props.pickAdvanced;
 
     return (
       <div className="card-group">
-        {mapAdvanced.map((person, index) => (
+        {mapAdvanced.map((person) => (
           <div className="card text-center">
             <div class="card">
               <div className="card-body">
@@ -16,7 +17,7 @@ class Advanced extends Component {
                   className="card-img-top"
                   alt="yogapic"
                   src={person.imgURL}
-                  key={index}
+                  key={person.id}
                 />
                 <br />
                 <br />
@@ -27,7 +28,11 @@ class Advanced extends Component {
                 <audio controls autoplay>
                   <source src={person.audio} />
                 </audio>
-                <button type="button" class="btn btn-primary btn-lg btn-block">
+                <button
+                  onClick={() => onPick(person.id)}
+                  type="button"
+                  class="btn btn-primary btn-lg btn-block"
+                >
                   Add to Routine
                 </button>
               </div>

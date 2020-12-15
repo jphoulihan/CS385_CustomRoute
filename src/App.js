@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import Beginner from "./components/Beginner";
+import Beginner from "./components/Beginner";
 import Intermediate from "./components/Intermediate";
 import Advanced from "./components/Advanced";
 import Custom from "./components/Custom";
@@ -12,10 +12,11 @@ class App extends Component {
     super(props);
     console.log("in constructor");
     // create three state variables.
-    // apiData is an array to hold our JSON data
+    // apiData... are arrays that hold our JSON data
+    //routineArray is an array to hold the items we select for our custom routine
     // isFetched indicates if the API call has finished
     // errorMsg is either null (none) or there is some error
-    //isBeginner/isIntermediate property begins set to false
+    //isBeginner/isIntermediate/isAdvanced/isGoToCustomRoutine begin set to false
     this.state = {
       apiData: [],
       apiDataBeginner: [],
@@ -27,6 +28,7 @@ class App extends Component {
       isIntermediate: false,
       isAdvanced: false,
       isGoToRoutine: false,
+      begClick: false,
       routineArray: []
     };
 
@@ -35,6 +37,8 @@ class App extends Component {
     this.toggleAdvanced = this.toggleAdvanced.bind(this);
     this.toggleRoutine = this.toggleRoutine.bind(this);
     this.pickBeginner = this.pickBeginner.bind(this);
+    this.pickAdvanced = this.pickAdvanced.bind(this);
+    this.pickIntermediate = this.pickIntermediate.bind(this);
   }
 
   //****************Toggle functions triggered on button click, isBeginner/isIntermediate/isAdvanced/isGoToRoutine toggle:false/true*********************//
@@ -65,7 +69,7 @@ class App extends Component {
     this.setState({ isAdvanced: false });
     this.setState((state) => ({ isGoToRoutine: !state.isGoToRoutine }));
   };
-  //****************function called on button click, isBeginner/isIntermediate = true*********************//
+  //****************End of toggle buttons that hide/display user choice*********************//
 
   //***********************Custom Routine****************************//
   //function gets the id of the object you select, is later used in filter function//
@@ -74,15 +78,48 @@ class App extends Component {
       return bodyObject.id === idToFind;
     };
   }
+  //subsequent filter functions to filter particular stretches from each array
+  //these will be passed as props into their respective components, first in the
+  //component tags in the app class render section, then in their class component bodies
+
+  // disableBeg = () => {
+  //   this.setState((state) => ({ begClick: !this.state.begClick }));
+  // };
 
   pickBeginner(bodyID) {
+    if (this.state.begClick) {
+      return;
+    }
+    this.setState({ begClick: true });
+
     let foundBodObj = this.state.apiDataBeginner.filter(this.getID(bodyID));
     this.setState({
       routineArray: this.state.routineArray.concat(foundBodObj)
     });
   }
 
-  //*********************************************************//
+  pickIntermediate(bodyID) {
+    let foundBodObj = this.state.apiDataIntermediate.filter(this.getID(bodyID));
+    this.setState({
+      routineArray: this.state.routineArray.concat(foundBodObj)
+    });
+  }
+
+  pickAdvanced(bodyID) {
+    let foundBodObj = this.state.apiDataAdvanced.filter(this.getID(bodyID));
+    this.setState({
+      routineArray: this.state.routineArray.concat(foundBodObj)
+    });
+  }
+  //******************End of Filter Functions for Custom Routine**********************//
+
+  //**********************Disabling Buttons******************************************** */
+
+  //************Clear Custom Routine Array******************/
+
+  clearRoutine() {
+    this.setState({ routineArray: [] });
+  }
 
   //****************API calls starts here********************//
   // componentDidMount() is invoked immediately after a
@@ -99,7 +136,6 @@ class App extends Component {
 
       // update the state variables correctly.
       //access different parts of the json array by initializing this.setState and creating key:value pairs.
-      this.setState({ apiDataAll: jsonResult });
       this.setState({ apiDataBeginner: jsonResult.beginner });
       this.setState({ apiDataIntermediate: jsonResult.intermediate });
       this.setState({ apiDataAdvanced: jsonResult.advanced });
@@ -183,7 +219,7 @@ class App extends Component {
               className="dropdown-item"
               type="button"
             >
-              Your Custom Routine
+              Your Routine
             </button>
           </div>
           {/*end of drop down button menu*/}
@@ -196,30 +232,32 @@ class App extends Component {
             <Beginner
               mapObjectBeginner={this.state.apiDataBeginner}
               pickBeginner={this.pickBeginner}
+              begOff={this.disableBeg}
             />
           ) : null}
           {/*Beginner map ternary statement triggered by a drop down button click*/}
-
-          {/*card container starts with map function*/}
           {/*The below ternary operator works as follows. On Intermediate button click it turns the isIntermediate value to true. If the isIntermedate is true 
           the Intermediate Componenent is called. Click the Intermediate button again and it returns to false, in which case nothing is mapped.
           Conceptually the ternary does this... is true ? do something : else something. First condition is executed after ? second condition after :*/}
           {this.state.isIntermediate ? (
             <Intermediate
               mapObjectIntermediate={this.state.apiDataIntermediate}
+              pickIntermediate={this.pickIntermediate}
             />
           ) : null}
           {/*End of intermediate map ternary statement triggered by a drop down button click*/}
-          {/*card container starts with map function*/}
+          {/*isAdvanced follows the same logic as the previous two components*/}
           {this.state.isAdvanced ? (
-            <Advanced mapObjectAdvanced={this.state.apiDataAdvanced} />
+            <Advanced
+              mapObjectAdvanced={this.state.apiDataAdvanced}
+              pickAdvanced={this.pickAdvanced}
+            />
           ) : null}
-          {/*card container routine starts with map function*/}
+          {/*Custom routine follows logic of preceeding components*/}
           {this.state.isGoToRoutine ? (
             <Custom mapObjectCustom={this.state.routineArray} />
           ) : null}
           <div>
-            {/*card container starts with map function*/}
             <br></br>
             <p className="footer">
               <small>This app was created by Team Silver.</small>
@@ -232,51 +270,4 @@ class App extends Component {
     } // end of the else statement.
   } // end of render()
 } // end of App class
-
-//******************************************* */
-class Beginner extends Component {
-  render() {
-    // const customItems = this.props.customItems;
-    //this const declaration connects this Beginner class to the App class. It is the way to pass the//
-    //apiDataBeginner state to call the map function on it from within this component//
-    const mapBeginner = this.props.mapObjectBeginner;
-    const onPick = this.props.pickBeginner;
-
-    return (
-      <div className="card-group">
-        {mapBeginner.map((person) => (
-          <div className="card text-center">
-            <div class="card">
-              <div className="card-body">
-                <img
-                  className="card-img-top"
-                  alt="yogapic"
-                  src={person.imgURL}
-                  key={person.id}
-                />
-                <br />
-                <br />
-                <h3 className="card-title">{person.body_part}</h3>
-                <h5 className="car-title">{person.position}</h5>
-                <p className="card-text">{person.description}</p>
-
-                <audio controls autoplay>
-                  <source src={person.audio} />
-                </audio>
-                <button
-                  onClick={() => onPick(person.id)}
-                  type="button"
-                  class="btn btn-primary btn-lg btn-block"
-                >
-                  Add to Routine
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-}
-//**************End of Beginner Component**********************//
 export default App;
