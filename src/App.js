@@ -18,7 +18,6 @@ class App extends Component {
     // errorMsg is either null (none) or there is some error
     //isBeginner/isIntermediate/isAdvanced/isGoToCustomRoutine begin set to false
     this.state = {
-      apiData: [],
       apiDataBeginner: [],
       apiDataIntermediate: [],
       apiDataAdvanced: [],
@@ -81,21 +80,15 @@ class App extends Component {
   //subsequent filter functions to filter particular stretches from each array
   //these will be passed as props into their respective components, first in the
   //component tags in the app class render section, then in their class component bodies
-
-  // disableBeg = () => {
-  //   this.setState((state) => ({ begClick: !this.state.begClick }));
-  // };
-
   pickBeginner(bodyID) {
-    if (this.state.begClick) {
-      return;
-    }
-    this.setState({ begClick: true });
-
     let foundBodObj = this.state.apiDataBeginner.filter(this.getID(bodyID));
     this.setState({
       routineArray: this.state.routineArray.concat(foundBodObj)
     });
+    // if (this.state.begClick) {
+    //   return;
+    // }
+    // this.setState({ begClick: true });
   }
 
   pickIntermediate(bodyID) {
@@ -198,28 +191,28 @@ class App extends Component {
               className="dropdown-item"
               type="button"
             >
-              Beginner
+              {this.state.isBeginner ? "Back" : "Beginner"}
             </button>
             <button
               onClick={this.toggleIntermediate}
               className="dropdown-item"
               type="button"
             >
-              Intermediate
+              {this.state.isIntermediate ? "Back" : "Intermediate"}
             </button>
             <button
               onClick={this.toggleAdvanced}
               className="dropdown-item"
               type="button"
             >
-              Advanced
+              {this.state.isAdvanced ? "Back" : "Advanced"}
             </button>
             <button
               onClick={this.toggleRoutine}
               className="dropdown-item"
               type="button"
             >
-              Your Routine
+              {this.state.isGoToRoutine ? "Back" : "Your Routine"}
             </button>
           </div>
           {/*end of drop down button menu*/}

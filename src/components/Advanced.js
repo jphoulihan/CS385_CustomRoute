@@ -31,7 +31,7 @@ class Advanced extends Component {
                 <button
                   onClick={() => onPick(person.id)}
                   type="button"
-                  class="btn btn-primary btn-lg btn-block"
+                  className="btn btn-primary btn-lg btn-block"
                 >
                   Add to Routine
                 </button>

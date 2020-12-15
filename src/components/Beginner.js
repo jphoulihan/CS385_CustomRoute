@@ -6,7 +6,6 @@ class Beginner extends Component {
     //apiDataBeginner state to call the map function on it from within this component//
     const mapBeginner = this.props.mapObjectBeginner;
     const onPick = this.props.pickBeginner;
-    const lessBeg = this.props.begOff;
 
     return (
       <div className="card-group">
@@ -32,9 +31,9 @@ class Beginner extends Component {
                 <button
                   onClick={() => onPick(person.id)}
                   type="button"
-                  class="btn btn-primary btn-lg btn-block"
+                  className="btn btn-primary btn-lg btn-block"
                 >
-                  {this.lessBeg ? "Add" : "Added"}
+                  Add to Routine
                 </button>
               </div>
             </div>
@@ -46,4 +45,3 @@ class Beginner extends Component {
 }
 
 export default Beginner;
-//**************End of Beginner Component**********************//
