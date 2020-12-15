@@ -21,20 +21,21 @@ class App extends Component {
       apiDataBeginner: [],
       apiDataIntermediate: [],
       apiDataAdvanced: [],
+      routineArray: [],
       isFetched: false,
       errorMsg: null,
       isBeginner: false,
       isIntermediate: false,
       isAdvanced: false,
       isGoToRoutine: false,
-      beginnerClicked: false,
-      routineArray: []
+      beginnerClicked: false
     };
 
     this.toggleBeginner = this.toggleBeginner.bind(this);
     this.toggleIntermediate = this.toggleIntermediate.bind(this);
     this.toggleAdvanced = this.toggleAdvanced.bind(this);
     this.toggleRoutine = this.toggleRoutine.bind(this);
+
     this.pickBeginner = this.pickBeginner.bind(this);
     this.pickAdvanced = this.pickAdvanced.bind(this);
     this.pickIntermediate = this.pickIntermediate.bind(this);
@@ -106,15 +107,9 @@ class App extends Component {
     });
   }
   //******************End of Filter Functions for Custom Routine**********************//
-
-  //**********************Disabling Buttons******************************************** */
-
-  //************Clear Custom Routine Array******************/
-
   clearRoutine() {
     this.setState({ routineArray: [] });
   }
-
   //****************API calls starts here********************//
   // componentDidMount() is invoked immediately after a
   // component is mounted (inserted into the tree)
@@ -192,28 +187,30 @@ class App extends Component {
               className="dropdown-item"
               type="button"
             >
-              {this.state.isBeginner ? "Back" : "Beginner"}
+              {this.state.isBeginner ? "Leave Beginner" : "Go Beginner"}
             </button>
             <button
               onClick={this.toggleIntermediate}
               className="dropdown-item"
               type="button"
             >
-              {this.state.isIntermediate ? "Back" : "Intermediate"}
+              {this.state.isIntermediate
+                ? "Leave Intermediate"
+                : " Go Intermediate"}
             </button>
             <button
               onClick={this.toggleAdvanced}
               className="dropdown-item"
               type="button"
             >
-              {this.state.isAdvanced ? "Back" : "Advanced"}
+              {this.state.isAdvanced ? "Leave Advanced" : "Go Advanced"}
             </button>
             <button
               onClick={this.toggleRoutine}
               className="dropdown-item"
               type="button"
             >
-              {this.state.isGoToRoutine ? "Back" : "Your Routine"}
+              {this.state.isGoToRoutine ? "Leave Routine" : "Your Routine"}
             </button>
           </div>
           {/*end of drop down button menu*/}
