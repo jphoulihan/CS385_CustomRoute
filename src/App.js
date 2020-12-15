@@ -27,7 +27,7 @@ class App extends Component {
       isIntermediate: false,
       isAdvanced: false,
       isGoToRoutine: false,
-      begClick: false,
+      beginnerClicked: false,
       routineArray: []
     };
 
@@ -81,14 +81,15 @@ class App extends Component {
   //these will be passed as props into their respective components, first in the
   //component tags in the app class render section, then in their class component bodies
   pickBeginner(bodyID) {
+    if (this.state.beginnerClicked) {
+      return;
+    }
+    this.setState({ beginnerClicked: true });
+
     let foundBodObj = this.state.apiDataBeginner.filter(this.getID(bodyID));
     this.setState({
       routineArray: this.state.routineArray.concat(foundBodObj)
     });
-    // if (this.state.begClick) {
-    //   return;
-    // }
-    // this.setState({ begClick: true });
   }
 
   pickIntermediate(bodyID) {
@@ -225,7 +226,7 @@ class App extends Component {
             <Beginner
               mapObjectBeginner={this.state.apiDataBeginner}
               pickBeginner={this.pickBeginner}
-              begOff={this.disableBeg}
+              beginnerDisabled={this.state.beginnerClicked}
             />
           ) : null}
           {/*Beginner map ternary statement triggered by a drop down button click*/}

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 class Beginner extends Component {
   render() {
-    // const customItems = this.props.customItems;
     //this const declaration connects this Beginner class to the App class. It is the way to pass the//
     //apiDataBeginner state to call the map function on it from within this component//
     const mapBeginner = this.props.mapObjectBeginner;
     const onPick = this.props.pickBeginner;
+    const disable = this.props.beginnerDisabled;
 
     return (
       <div className="card-group">
@@ -30,6 +30,7 @@ class Beginner extends Component {
                 </audio>
                 <button
                   onClick={() => onPick(person.id)}
+                  disabled={disable}
                   type="button"
                   className="btn btn-primary btn-lg btn-block"
                 >
