@@ -9,7 +9,7 @@ class Custom extends Component {
       <div className="card-group">
         {mapCustom.map((person, index) => (
           <div className="card text-center">
-            <div class="card">
+            <div className="card">
               <div className="card-body">
                 <img
                   className="card-img-top"
@@ -31,7 +31,10 @@ class Custom extends Component {
           </div>
         ))}
         {mapCustom.length <= 0 && (
-          <img src="https://i.imgur.com/SHoxUWx.gif" alt="Empty"></img>
+          <div className="card">
+            <img src="https://i.imgur.com/SHoxUWx.gif" alt="Empty"></img>
+            <p classname="card-text">There's nothing here, go add stretches</p>
+          </div>
         )}
       </div>
     );
