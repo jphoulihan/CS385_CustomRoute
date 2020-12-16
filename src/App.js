@@ -40,6 +40,7 @@ class App extends Component {
     this.pickAdvanced = this.pickAdvanced.bind(this);
     this.pickIntermediate = this.pickIntermediate.bind(this);
     this.disableChildButton = this.disableChildButton.bind(this);
+    this.reset = this.reset.bind(this);
   }
 
   //****************Toggle functions triggered on button click, isBeginner/isIntermediate/isAdvanced/isGoToRoutine toggle:false/true*********************//
@@ -81,7 +82,7 @@ class App extends Component {
   }
   //subsequent filter functions to filter particular stretches from each array
   //these will be passed as props into their respective components, first in the
-  //component tags in the app class render section, then in their class component bodies
+  //component tags in the App class render section, then in their class component bodies
   pickBeginner(bodyID) {
     let foundBodObj = this.state.apiDataBeginner.filter(this.getID(bodyID));
     this.setState({
@@ -110,12 +111,18 @@ class App extends Component {
     this.setState({
       routineChoices: this.state.routineChoices.concat(bodyID)
     });
+    // console.log(this.state.routineArray.findIndex((el) => el === bodyID));
   }
   //******************End of Filter Functions for Custom Routine**********************//
   reset() {
-    this.setState({ routineChoices: [] });
+    this.setState({
+      routineArray: []
+    });
+    this.setState({
+      routineChoices: []
+    });
   }
-  //*******************Disable Buttons********************************************* */
+  //*******************Disable Button********************************************* */
   disableChildButton(bodyID) {
     // indexOf belongs to Javascript
     // returns -1 if the item is not in the array
@@ -240,6 +247,7 @@ class App extends Component {
               mapObjectBeginner={this.state.apiDataBeginner}
               pickBeginner={this.pickBeginner}
               childCheckButton={this.disableChildButton}
+              routineChoices={this.routineChoices}
             />
           ) : null}
           {/*Beginner map ternary statement triggered by a drop down button click*/}
@@ -264,9 +272,22 @@ class App extends Component {
           ) : null}
           {/*Custom routine follows logic of preceeding components*/}
           {this.state.isGoToRoutine ? (
-            <Custom mapObjectCustom={this.state.routineArray} />
+            <Custom
+              mapObjectCustom={this.state.routineArray}
+              onRemoveStretch={this.onRemoveStretch}
+            />
           ) : null}
           <div>
+            {/**Custom Routine and Disable Buttons Reset, appears when items have been added***/}
+            {this.state.routineArray.length > 0 && (
+              <button
+                onClick={this.reset}
+                type="button"
+                className="btn btn-info btn-lg btn-block"
+              >
+                Reset Custom Routine
+              </button>
+            )}
             <br></br>
             <p className="footer">
               <small>This app was created by Team Silver.</small>
