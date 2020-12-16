@@ -22,13 +22,13 @@ class App extends Component {
       apiDataIntermediate: [],
       apiDataAdvanced: [],
       routineArray: [],
+      routineChoices: [],
       isFetched: false,
       errorMsg: null,
       isBeginner: false,
       isIntermediate: false,
       isAdvanced: false,
-      isGoToRoutine: false,
-      beginnerClicked: false
+      isGoToRoutine: false
     };
 
     this.toggleBeginner = this.toggleBeginner.bind(this);
@@ -39,6 +39,7 @@ class App extends Component {
     this.pickBeginner = this.pickBeginner.bind(this);
     this.pickAdvanced = this.pickAdvanced.bind(this);
     this.pickIntermediate = this.pickIntermediate.bind(this);
+    this.disableChildButton = this.disableChildButton.bind(this);
   }
 
   //****************Toggle functions triggered on button click, isBeginner/isIntermediate/isAdvanced/isGoToRoutine toggle:false/true*********************//
@@ -82,14 +83,12 @@ class App extends Component {
   //these will be passed as props into their respective components, first in the
   //component tags in the app class render section, then in their class component bodies
   pickBeginner(bodyID) {
-    if (this.state.beginnerClicked) {
-      return;
-    }
-    this.setState({ beginnerClicked: true });
-
     let foundBodObj = this.state.apiDataBeginner.filter(this.getID(bodyID));
     this.setState({
       routineArray: this.state.routineArray.concat(foundBodObj)
+    });
+    this.setState({
+      routineChoices: this.state.routineChoices.concat(bodyID)
     });
   }
 
@@ -98,6 +97,9 @@ class App extends Component {
     this.setState({
       routineArray: this.state.routineArray.concat(foundBodObj)
     });
+    this.setState({
+      routineChoices: this.state.routineChoices.concat(bodyID)
+    });
   }
 
   pickAdvanced(bodyID) {
@@ -105,10 +107,24 @@ class App extends Component {
     this.setState({
       routineArray: this.state.routineArray.concat(foundBodObj)
     });
+    this.setState({
+      routineChoices: this.state.routineChoices.concat(bodyID)
+    });
   }
   //******************End of Filter Functions for Custom Routine**********************//
-  clearRoutine() {
-    this.setState({ routineArray: [] });
+  reset() {
+    this.setState({ routineChoices: [] });
+  }
+  //*******************Disable Buttons********************************************* */
+  disableChildButton(bodyID) {
+    // indexOf belongs to Javascript
+    // returns -1 if the item is not in the array
+    // works for primitive data types only - strings, integers, etc.
+    if (this.state.routineChoices.indexOf(bodyID) >= 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
   //****************API calls starts here********************//
   // componentDidMount() is invoked immediately after a
@@ -223,7 +239,7 @@ class App extends Component {
             <Beginner
               mapObjectBeginner={this.state.apiDataBeginner}
               pickBeginner={this.pickBeginner}
-              beginnerDisabled={this.state.beginnerClicked}
+              childCheckButton={this.disableChildButton}
             />
           ) : null}
           {/*Beginner map ternary statement triggered by a drop down button click*/}
@@ -234,6 +250,7 @@ class App extends Component {
             <Intermediate
               mapObjectIntermediate={this.state.apiDataIntermediate}
               pickIntermediate={this.pickIntermediate}
+              childCheckButton={this.disableChildButton}
             />
           ) : null}
           {/*End of intermediate map ternary statement triggered by a drop down button click*/}
@@ -242,6 +259,7 @@ class App extends Component {
             <Advanced
               mapObjectAdvanced={this.state.apiDataAdvanced}
               pickAdvanced={this.pickAdvanced}
+              childCheckButton={this.disableChildButton}
             />
           ) : null}
           {/*Custom routine follows logic of preceeding components*/}

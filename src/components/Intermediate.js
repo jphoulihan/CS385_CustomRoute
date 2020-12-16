@@ -4,6 +4,7 @@ class Intermediate extends Component {
   render() {
     const mapIntermediate = this.props.mapObjectIntermediate;
     const onPick = this.props.pickIntermediate;
+    const childCheckButton = this.props.childCheckButton;
 
     return (
       <div className="card-group">
@@ -26,11 +27,12 @@ class Intermediate extends Component {
                   <source src={person.audio} />
                 </audio>
                 <button
+                  disabled={childCheckButton(person.id) && true}
                   onClick={() => onPick(person.id)}
                   type="button"
                   className="btn btn-primary btn-lg btn-block"
                 >
-                  Add to Routine
+                  {childCheckButton(person.id) ? "Stretch Added" : "Add"}
                 </button>
               </div>
             </div>

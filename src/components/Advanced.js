@@ -6,6 +6,7 @@ class Advanced extends Component {
     //apiDataBeginner state to call the map function on it from within this component//
     const mapAdvanced = this.props.mapObjectAdvanced;
     const onPick = this.props.pickAdvanced;
+    const childCheckButton = this.props.childCheckButton;
 
     return (
       <div className="card-group">
@@ -29,11 +30,12 @@ class Advanced extends Component {
                   <source src={person.audio} />
                 </audio>
                 <button
+                  disabled={childCheckButton(person.id) && true}
                   onClick={() => onPick(person.id)}
                   type="button"
                   className="btn btn-primary btn-lg btn-block"
                 >
-                  Add to Routine
+                  {childCheckButton(person.id) ? "Stretch Added" : "Add"}
                 </button>
               </div>
             </div>
